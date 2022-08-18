@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -8,17 +9,14 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List todoList = [];
+  List<String> todoList = [];
   String currentAction = "";
 
-  @override
-  void initState() {
-    todoList.addAll(["Купить молоко", "Постирать вещи"]);
-    super.initState();
-  }
+
 
   @override
   Widget build(BuildContext context) {
+    _getPrefs();
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: AppBar(
@@ -39,6 +37,7 @@ class _HomeState extends State<Home> {
                       setState(() {
                         todoList.removeAt(index);
                       });
+                      _setPrefs();
                     },
                   ),
                 ),
@@ -47,6 +46,7 @@ class _HomeState extends State<Home> {
                 setState(() {
                   todoList.removeAt(index);
                 });
+                _setPrefs();
               },
             );
           }),
@@ -67,6 +67,7 @@ class _HomeState extends State<Home> {
                       setState(() {
                         todoList.add(currentAction);
                       });
+                      _setPrefs();
                       Navigator.of(context).pop();
                     }, child: Text("Добавить"))
                   ],
@@ -78,4 +79,16 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
+  void _setPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList('TodoList', todoList);
+  }
+
+  void _getPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    todoList = prefs.getStringList('TodoList')!;
+
+  }
+
 }
