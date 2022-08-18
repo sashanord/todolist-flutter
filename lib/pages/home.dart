@@ -16,7 +16,9 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    _getPrefs();
+    setState(() {
+      _getPrefs();
+    });
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: AppBar(
@@ -87,7 +89,9 @@ class _HomeState extends State<Home> {
 
   void _getPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    todoList = prefs.getStringList('TodoList')!;
+    setState(() {
+      todoList = prefs.getStringList('TodoList')!;
+    });
 
   }
 
