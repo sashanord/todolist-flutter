@@ -12,8 +12,6 @@ class _HomeState extends State<Home> {
   List<String> todoList = [];
   String currentAction = "";
 
-
-
   @override
   Widget build(BuildContext context) {
     setState(() {
@@ -24,6 +22,27 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text("Список дел"),
         centerTitle: true,
+        actions: [
+          PopupMenuButton(
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem(
+                  child: Text(
+                    "О приложении",
+                  ),
+                  value: "О приложении",
+                )
+              ];
+            },
+            onSelected: (value) {
+              switch (value) {
+                case ("О приложении"):
+                  Navigator.pushNamed(context,'/aboutApp');
+
+              }
+            },
+          )
+        ],
       ),
       body: ListView.builder(
           itemCount: todoList.length,
@@ -65,13 +84,15 @@ class _HomeState extends State<Home> {
                     },
                   ),
                   actions: [
-                    TextButton(onPressed: () {
-                      setState(() {
-                        todoList.add(currentAction);
-                      });
-                      _setPrefs();
-                      Navigator.of(context).pop();
-                    }, child: Text("Добавить"))
+                    TextButton(
+                        onPressed: () {
+                          setState(() {
+                            todoList.add(currentAction);
+                          });
+                          _setPrefs();
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("Добавить"))
                   ],
                 );
               });
@@ -92,7 +113,5 @@ class _HomeState extends State<Home> {
     setState(() {
       todoList = prefs.getStringList('TodoList')!;
     });
-
   }
-
 }
